@@ -27,6 +27,7 @@ body {
   background: #fff;
   box-sizing: border-box;
   padding: 0.35cm 0.5cm 0.75cm 0.5cm;  /* 保留原留白 */
+  
 }
 
 
@@ -670,29 +671,93 @@ body { padding-right: var(--tools-pad, 0px); }
   }
 }
 
-/* 1. 修改左側容器的布局 */
+/* 左側容器固定在螢幕左側，獨立於 A4 頁面 */
 .left-side-links-6 {
-  /* [保留原本的定位和尺寸，例如 width: 280px; height: 760px;] */
-  position: absolute; /* 👈 改為 absolute，相對 .page 定位 */
-  top: 40%; /* 垂直中央定位點 */
-  left: 50%; /* 水平中央定位點 */
-  transform: translate(calc(-50% - 21cm / 2 - 320px), -50%); 
-  
-  width: 280px; /* 容器寬度（依您的原始設定） */
-  height: 760px; /* 容器高度（依您的原始設定） */
-  overflow: hidden; /* 確保內容不溢出 */
+  position: fixed;          /* 👈 改為 fixed，固定在視窗 */
+  top: 50%;                 /* 垂直置中 */
+  left: 20px;                  /* 貼齊螢幕左邊 */
+  transform: translateY(-50%);
+  width: 280px;             /* 容器寬度 */
+  height: 670px;            /* 容器高度（可自行調整） */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   z-index: 9999;
-  
-  padding: 0; /* 移除原本的 padding，讓頂部圖示可以貼邊 */
-  background: #fff; 
-  border: 1px solid #ccc; 
-  border-radius: 5px; 
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-
-  /* 啟用 Flexbox 讓圖示在上，連結在下 */
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
+
+/* 上方四個圖示區 */
+.top-icons-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 70px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f8f8f8;
+}
+
+/* 單個圖示格 */
+.icon-square {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-right: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+.icon-square:last-child {
+  border-right: none;
+}
+.icon-square.active {
+  background-color: #e0e0e0;
+}
+.icon-square img {
+  max-width: 60%;
+  max-height: 60%;
+  object-fit: contain;
+}
+
+/* 下方連結區域 */
+.link-display-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  text-align: center;
+}
+
+/* 多組連結的樣式 */
+.link-list {
+  display: none;
+}
+.link-list.active {
+  display: block;
+}
+.link-group {
+  margin-bottom: 15px;
+}
+.link-group a.text-link {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.link-group a.image-link img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #333;
+}
+
+/* ✅ 列印時隱藏左側容器 */
+@media print {
+  .left-side-links-6 {
+    display: none !important;
+  }
+}
+
 
 /* 2. 頂部四個等寬高的圖示容器 */
 .top-icons-container {
@@ -781,6 +846,135 @@ body { padding-right: var(--tools-pad, 0px); }
   </style>
 </head>
 <body>
+
+<div class="left-side-links-6" id="left-container">
+
+    <div class="top-icons-container">
+        <div class="icon-square active" data-target="fb-links">
+            <img src="https://i.meee.com.tw/orvGaxr.png" alt="FB">
+        </div>
+        <div class="icon-square" data-target="line-links">
+            <img src="https://i.meee.com.tw/SrSlsCd.png" alt="LINE">
+        </div>
+        <div class="icon-square" data-target="map-links">
+            <img src="https://i.meee.com.tw/0Emwf7Q.png" alt="地圖">
+        </div>
+        <div class="icon-square" data-target="YT-links">
+            <img src="https://i.meee.com.tw/XZQAgoO.png" alt="YT">
+        </div>
+    </div>
+
+    <div class="link-display-area">
+        
+        <div class="link-list active" id="fb-links">
+<div class="link-group">
+      <a href="https://www.facebook.com/profile.php?id=100063626421578&locale=zh_TW" target="_blank" class="text-link" style="font-size: 20px;">台灣房屋鑫典團隊<br>新莊副都心加盟店</a>
+      <a href="https://www.facebook.com/profile.php?id=100063626421578&locale=zh_TW" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/JypQn63.jpeg" alt="台灣房屋鑫典團隊新莊副都心加盟店">
+      </a>
+  </div>
+
+  <div class="link-group">
+      <a href="https://www.facebook.com/profile.php?id=100063802268750&locale=zh_TW" target="_blank" class="text-link" style="font-size: 20px;">台灣房屋鑫典團隊<br>新莊頭前旗艦加盟店</a>
+      <a href="https://www.facebook.com/profile.php?id=100063802268750&locale=zh_TW" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/QBTEci5.jpeg" alt="台灣房屋鑫典團隊新莊頭前旗艦加盟店">
+      </a>
+  </div>
+  
+  <div class="link-group">
+      <a href="https://www.facebook.com/profile.php?id=61570648511691&locale=zh_TW" target="_blank" class="text-link" style="font-size: 20px;">台灣房屋鑫典團隊<br>先嗇宮捷運加盟店</a>
+      <a href="https://www.facebook.com/profile.php?id=61570648511691&locale=zh_TW" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/ygDSCW0.jpeg" alt="台灣房屋鑫典團隊先嗇宮捷運加盟店">
+      </a>
+  </div>
+
+  <div class="link-group">
+      <a href="https://www.facebook.com/share/g/1FhsbRDdcN/" target="_blank" class="text-link" style="font-size: 20px;">鑫典團隊生活點滴全紀錄</a>
+      <a href="https://www.facebook.com/share/g/1FhsbRDdcN/" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/EJl7OOL.jpeg" alt="鑫典團隊生活點滴全紀錄">
+      </a>
+  </div>
+
+  <div class="link-group">
+      <a href="https://www.facebook.com/share/g/17h8t4wdwq/" target="_blank" class="text-link" style="font-size: 20px;">二重在地生活全紀錄</a>
+      <a href="https://www.facebook.com/share/g/17h8t4wdwq/" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/RK0f8OI.jpeg" alt="二重在地生活全紀錄">
+      </a>
+  </div>
+  
+  <div class="link-group">
+      <a href="https://www.facebook.com/share/g/17iWXUc6C4/" target="_blank" class="text-link" style="font-size: 20px;">我是新莊人 二重人 三重人</a>
+      <a href="https://www.facebook.com/share/g/17iWXUc6C4/" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/XG0sXgC.jpeg" alt="我是新莊人 二重人 三重人">
+      </a>
+  </div>
+        </div>
+
+        <div class="link-list" id="line-links">
+  <div class="link-group">
+      <a  target="_blank" class="text-link" style="font-size: 20px;">台灣房屋 地產機器人</a>
+      <a  target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/5iS0DpL.jpeg" alt="地產機器人">
+      </a>
+  </div>
+  
+  <div class="link-group">
+      <a target="_blank" class="text-link" style="font-size: 20px;">鑫典斡旋LINE帳號</a>
+      <a target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/Tity4Tc.jpeg" alt="鑫典斡旋群組">
+      </a>
+  </div>
+        </div>
+
+        <div class="link-list" id="map-links">
+  <div class="link-group">
+      <a href="https://maps.app.goo.gl/ue8yijBp4x9sxWHAA" target="_blank" class="text-link" style="font-size: 20px;">副都心GOOGLE MAP</a>
+      <a href="https://maps.app.goo.gl/ue8yijBp4x9sxWHAA" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/2Nk073I.jpeg" alt="副都心地圖">
+      </a>
+  </div>		
+
+  <div class="link-group">
+      <a href="https://maps.app.goo.gl/pfEsjRJkq5jTRJEJ6" target="_blank" class="text-link" style="font-size: 20px;">頭前GOOGLE MAP</a>
+      <a href="https://maps.app.goo.gl/pfEsjRJkq5jTRJEJ6" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/hSlv34C.jpeg" alt="頭前地圖">
+      </a>
+  </div>
+    
+  <div class="link-group">
+      <a href="https://maps.app.goo.gl/k7nNcaiVMTR2ZyjdA" target="_blank" class="text-link" style="font-size: 20px;">先嗇宮捷運<br>GOOGLE MAP</a>
+      <a href="https://maps.app.goo.gl/k7nNcaiVMTR2ZyjdA" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/LNmbhCG.jpeg" alt="先嗇宮地圖">
+      </a>
+  </div>
+        </div>
+
+        <div class="link-list" id="YT-links">
+  <div class="link-group">
+      <a href="https://www.youtube.com/watch?v=sgaV2HpVU-4" target="_blank" class="text-link" style="font-size: 20px;">大雲端教學</a>
+      <a href="https://www.youtube.com/watch?v=sgaV2HpVU-4" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/rCJwDKW.jpeg" alt="大雲端教學">
+      </a>
+  </div>		
+
+  <div class="link-group">
+      <a href="https://www.youtube.com/watch?v=oFbK3JFgmxc" target="_blank" class="text-link" style="font-size: 20px;">登錄表教學</a>
+      <a href="https://www.youtube.com/watch?v=oFbK3JFgmxc" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/zA4kX6A.jpeg" alt="登錄表教學">
+      </a>
+  </div>
+    
+  <div class="link-group">
+      <a href="https://www.youtube.com/watch?v=t21eiDMPMw0" target="_blank" class="text-link" style="font-size: 20px;">特利屋教學</a>
+      <a href="https://www.youtube.com/watch?v=t21eiDMPMw0" target="_blank" class="image-link">
+          <img src="https://i.meee.com.tw/COwB4Q1.jpeg" alt="特利屋教學">
+      </a>
+  </div>
+        </div>
+
+    </div>
+</div>
+
   <div class="page">
     <table>
 	<colgroup>
@@ -1211,133 +1405,7 @@ body { padding-right: var(--tools-pad, 0px); }
   </div>
 </div>
 
-<div class="left-side-links-6" id="left-container">
 
-    <div class="top-icons-container">
-        <div class="icon-square active" data-target="fb-links">
-            <img src="https://i.meee.com.tw/orvGaxr.png" alt="FB">
-        </div>
-        <div class="icon-square" data-target="line-links">
-            <img src="https://i.meee.com.tw/SrSlsCd.png" alt="LINE">
-        </div>
-        <div class="icon-square" data-target="map-links">
-            <img src="https://i.meee.com.tw/0Emwf7Q.png" alt="地圖">
-        </div>
-        <div class="icon-square" data-target="YT-links">
-            <img src="https://i.meee.com.tw/XZQAgoO.png" alt="YT">
-        </div>
-    </div>
-
-    <div class="link-display-area">
-        
-        <div class="link-list active" id="fb-links">
-<div class="link-group">
-      <a href="https://www.facebook.com/profile.php?id=100063626421578&locale=zh_TW" target="_blank" class="text-link" style="font-size: 20px;">台灣房屋鑫典團隊<br>新莊副都心加盟店</a>
-      <a href="https://www.facebook.com/profile.php?id=100063626421578&locale=zh_TW" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/JypQn63.jpeg" alt="台灣房屋鑫典團隊新莊副都心加盟店">
-      </a>
-  </div>
-
-  <div class="link-group">
-      <a href="https://www.facebook.com/profile.php?id=100063802268750&locale=zh_TW" target="_blank" class="text-link" style="font-size: 20px;">台灣房屋鑫典團隊<br>新莊頭前旗艦加盟店</a>
-      <a href="https://www.facebook.com/profile.php?id=100063802268750&locale=zh_TW" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/QBTEci5.jpeg" alt="台灣房屋鑫典團隊新莊頭前旗艦加盟店">
-      </a>
-  </div>
-  
-  <div class="link-group">
-      <a href="https://www.facebook.com/profile.php?id=61570648511691&locale=zh_TW" target="_blank" class="text-link" style="font-size: 20px;">台灣房屋鑫典團隊<br>先嗇宮捷運加盟店</a>
-      <a href="https://www.facebook.com/profile.php?id=61570648511691&locale=zh_TW" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/ygDSCW0.jpeg" alt="台灣房屋鑫典團隊先嗇宮捷運加盟店">
-      </a>
-  </div>
-
-  <div class="link-group">
-      <a href="https://www.facebook.com/share/g/1FhsbRDdcN/" target="_blank" class="text-link" style="font-size: 20px;">鑫典團隊生活點滴全紀錄</a>
-      <a href="https://www.facebook.com/share/g/1FhsbRDdcN/" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/EJl7OOL.jpeg" alt="鑫典團隊生活點滴全紀錄">
-      </a>
-  </div>
-
-  <div class="link-group">
-      <a href="https://www.facebook.com/share/g/17h8t4wdwq/" target="_blank" class="text-link" style="font-size: 20px;">二重在地生活全紀錄</a>
-      <a href="https://www.facebook.com/share/g/17h8t4wdwq/" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/RK0f8OI.jpeg" alt="二重在地生活全紀錄">
-      </a>
-  </div>
-  
-  <div class="link-group">
-      <a href="https://www.facebook.com/share/g/17iWXUc6C4/" target="_blank" class="text-link" style="font-size: 20px;">我是新莊人 二重人 三重人</a>
-      <a href="https://www.facebook.com/share/g/17iWXUc6C4/" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/XG0sXgC.jpeg" alt="我是新莊人 二重人 三重人">
-      </a>
-  </div>
-        </div>
-
-        <div class="link-list" id="line-links">
-  <div class="link-group">
-      <a  target="_blank" class="text-link" style="font-size: 20px;">台灣房屋 地產機器人</a>
-      <a  target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/5iS0DpL.jpeg" alt="地產機器人">
-      </a>
-  </div>
-  
-  <div class="link-group">
-      <a target="_blank" class="text-link" style="font-size: 20px;">鑫典斡旋LINE帳號</a>
-      <a target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/Tity4Tc.jpeg" alt="鑫典斡旋群組">
-      </a>
-  </div>
-        </div>
-
-        <div class="link-list" id="map-links">
-  <div class="link-group">
-      <a href="https://maps.app.goo.gl/ue8yijBp4x9sxWHAA" target="_blank" class="text-link" style="font-size: 20px;">副都心GOOGLE MAP</a>
-      <a href="https://maps.app.goo.gl/ue8yijBp4x9sxWHAA" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/2Nk073I.jpeg" alt="副都心地圖">
-      </a>
-  </div>		
-
-  <div class="link-group">
-      <a href="https://maps.app.goo.gl/pfEsjRJkq5jTRJEJ6" target="_blank" class="text-link" style="font-size: 20px;">頭前GOOGLE MAP</a>
-      <a href="https://maps.app.goo.gl/pfEsjRJkq5jTRJEJ6" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/hSlv34C.jpeg" alt="頭前地圖">
-      </a>
-  </div>
-    
-  <div class="link-group">
-      <a href="https://maps.app.goo.gl/k7nNcaiVMTR2ZyjdA" target="_blank" class="text-link" style="font-size: 20px;">先嗇宮捷運<br>GOOGLE MAP</a>
-      <a href="https://maps.app.goo.gl/k7nNcaiVMTR2ZyjdA" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/LNmbhCG.jpeg" alt="先嗇宮地圖">
-      </a>
-  </div>
-        </div>
-
-        <div class="link-list" id="YT-links">
-  <div class="link-group">
-      <a href="https://www.youtube.com/watch?v=sgaV2HpVU-4" target="_blank" class="text-link" style="font-size: 20px;">大雲端教學</a>
-      <a href="https://www.youtube.com/watch?v=sgaV2HpVU-4" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/rCJwDKW.jpeg" alt="大雲端教學">
-      </a>
-  </div>		
-
-  <div class="link-group">
-      <a href="https://www.youtube.com/watch?v=oFbK3JFgmxc" target="_blank" class="text-link" style="font-size: 20px;">登錄表教學</a>
-      <a href="https://www.youtube.com/watch?v=oFbK3JFgmxc" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/zA4kX6A.jpeg" alt="登錄表教學">
-      </a>
-  </div>
-    
-  <div class="link-group">
-      <a href="https://www.youtube.com/watch?v=t21eiDMPMw0" target="_blank" class="text-link" style="font-size: 20px;">特利屋教學</a>
-      <a href="https://www.youtube.com/watch?v=t21eiDMPMw0" target="_blank" class="image-link">
-          <img src="https://i.meee.com.tw/COwB4Q1.jpeg" alt="特利屋教學">
-      </a>
-  </div>
-        </div>
-
-    </div>
-</div>
 
 
 </div>
@@ -1788,5 +1856,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
-
 </html>
