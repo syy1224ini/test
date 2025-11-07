@@ -27,6 +27,8 @@ body {
   background: #fff;
   box-sizing: border-box;
   padding: 0.35cm 0.5cm 0.75cm 0.5cm;  /* 保留原留白 */
+  overflow: visible !important;
+  min-width: calc(21cm + 0px); /* 21cm 頁寬 + 左側容器寬(280px) + 間距(40px) */
   
 }
 
@@ -496,7 +498,7 @@ body{ padding-right: var(--tools-pad, 0px); }
 /* 右側工具列：固定定位；列印時隱藏 */
 #ptools {
   position: absolute; /* 👈 必須是 absolute */
-  right: -6.5cm;         /* 這是距離表格右邊的距離，可微調 */
+  right: 2cm;         /* 這是距離表格右邊的距離，可微調 */
   top: 40%;
   transform: translateY(-50%);
   z-index: 9999;
@@ -671,22 +673,96 @@ body { padding-right: var(--tools-pad, 0px); }
   }
 }
 
-/* 左側容器固定在螢幕左側，獨立於 A4 頁面 */
-.left-side-links-6 {
-  position: fixed;          /* 👈 改為 fixed，固定在視窗 */
-  top: 50%;                 /* 垂直置中 */
-  left: 20px;                  /* 貼齊螢幕左邊 */
+/* ---------- 新增：paper-wrap（確保橫向寬度包含左側容器） ---------- */
+.paper-wrap {
+  /* 讓這個包裹物的寬度包含 A4 + 左側容器 */
+  position: relative;
+  display: inline-block;               /* 重要：用 inline-block 方便水平置中（用 text-align:center） */
+  transform: translateX(100px); /* 向左移動 100px，可自行調整距離 */
+  vertical-align: top;
+  padding-left: 100px;
+  min-width: calc(21cm + 320px);       /* 21cm A4 + 左側寬度(280px) + 間距(40px) */
+  box-sizing: content-box;
+}
+
+/* 2. 新增偽元素，強制擴展左側可捲動空間 */
+.paper-wrap::before {
+  content: "";
+  display: block;  /* 讓它參與文檔流的寬度計算 */
+  height: 0;       /* 不佔垂直空間 */
+  width: 0;        /* 本身寬度為零 */
+
+  /* 關鍵修正：使用負邊距將後續內容（A4 頁面）整體向左推，
+     從而有效地在 A4 頁面左側創造一個 320px 的可捲動空間。
+     320px = 左側容器寬 (280px) + 預期間距 (40px)
+  */
+  margin-left: -320px;
+}
+
+/* 讓 body 以文字置中方式把 .paper-wrap 置中（避免 flex 帶來的 overflow 計算怪異） */
+body {
+  margin: 0;
+  min-height: 100vh;
+  text-align: center;    /* 把 .paper-wrap 置中 */
+  background: #eee;
+  -webkit-overflow-scrolling: touch;
+  /* 保留原本「允許水平滾動」的設定 */
+  overflow-x: auto !important;
+}
+
+/* .page 繼續當 A4（內部結構不變），但改為塊級元素，讓它在 .paper-wrap 中呈現 */
+.paper-wrap .page {
+  display: block;
+  width: 21cm;
+  height: 29.7cm;
+  background: #fff;
+  box-sizing: border-box;
+  padding: 0.35cm 0.5cm 0.75cm 0.5cm;
+  margin: 0;            /* 內部不要額外 margin */
+  overflow: visible;
+}
+
+/* 左側容器：相對於 .paper-wrap 絕對定位（這樣就屬於 wrapper 的寬度範圍） */
+.paper-wrap .left-side-links-6 {
+  position: absolute;                 /* 相對 .paper-wrap 定位 */
+  left: -320px !important; /* 相對於 .paper-wrap 左邊緣，往左 320px 處開始 */
+  top: 40%;
   transform: translateY(-50%);
-  width: 280px;             /* 容器寬度 */
-  height: 670px;            /* 容器高度（可自行調整） */
+  width: 280px;
+  height: 760px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 9999;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/* 若你有原先針對 body 的 padding-right 變數（給右側工具列用），保留它 */
+body { padding-right: var(--tools-pad, 0px); }
+
+/* 列印時隱藏左側工具列、維持列印寬度不變（保留你原本的列印規則） */
+@media print {
+  .paper-wrap {
+    transform: none !important;
+    padding-left: 0 !important;
+    min-width: 21cm !important;
+  }
+  .left-side-links-6 { display: none !important; }
+  /* 以下兩行確保列印時頁面保持 A4 */
+  .page { width: 210mm; height: 297mm; margin-left: 0 !important; }
+  body { text-align: left; padding-right: 0 !important; }
+}
+
+/* 手機小螢幕（保持你原本的手機行為） */
+@media (max-width: 900px) {
+  /* 在小螢幕把 wrapper 與 page 貼齊並允許左右滑動 */
+  body { text-align: left; }
+  .paper-wrap { min-width: 210mm; display: block; }
+  .paper-wrap .page { margin-left: 0 !important; width: 210mm !important; min-width:210mm !important; }
+  .paper-wrap .left-side-links-6 { position: relative; left: 0; transform: none; width: 100%; height: auto; box-shadow:none; border:0; }
 }
 
 /* 上方四個圖示區 */
@@ -843,10 +919,39 @@ body { padding-right: var(--tools-pad, 0px); }
   }
 }
 
+.scroll-wrapper {
+  position: relative;         /* ✅ 建立定位環境，未來可放其他元素 */
+  height: 100%;               /* ✅ 撐滿整個視窗高度 */
+  width: 100%;                /* ✅ 預設寬度佔滿視窗 */
+  overflow-x: auto;           /* ✅ 開啟橫向滾動 */
+  overflow-y: auto;         /* ✅ 避免出現雙滾動條 */
+  
+  /* ✅ 預留空間：左右各延伸 8 公分（可自行調整） */
+  padding-left: 8cm;
+  padding-right: 8cm;
+  
+  box-sizing: content-box;    /* ✅ 確保 padding 不吃掉內部寬度 */
+  background: #f8f8f8;        /* 可選，看起來更清楚整體範圍 */
+}
+
+@media print {
+  .scroll-wrapper {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+}
+
+
+
+
+
+
+
   </style>
 </head>
 <body>
-
+<div class="scroll-wrapper">
+<div class="paper-wrap">
 <div class="left-side-links-6" id="left-container">
 
     <div class="top-icons-container">
@@ -975,7 +1080,7 @@ body { padding-right: var(--tools-pad, 0px); }
     </div>
 </div>
 
-  <div class="page">
+ <div class="page"> 
     <table>
 	<colgroup>
   <col style="width:8cm;">
@@ -1397,6 +1502,8 @@ body { padding-right: var(--tools-pad, 0px); }
 
     </table>
 	
+</div>
+
 <div id="ptools">
   <div class="stack">
 	<button onclick="window.open('https://syy1224ini.github.io/twhgxdtdzldlb/', '_blank')">租賃點我</button>
@@ -1408,6 +1515,7 @@ body { padding-right: var(--tools-pad, 0px); }
 
 
 
+</div>
 </div>
   
 <script>
