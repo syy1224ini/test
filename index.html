@@ -1962,6 +1962,40 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<style>
+  /* 預設隱藏提示 */
+  #mobile-warning {
+    display: none !important;
+  }
+
+  /* 手機寬度 (<900px) 時才顯示提示、隱藏主要內容 */
+  @media (max-width: 900px) {
+    #mobile-warning {
+      display: flex !important;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      color: #fff;
+      font-size: 22px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 999999;
+      flex-direction: column;
+    }
+
+    .scroll-wrapper {
+      display: none !important;
+    }
+  }
+</style>
+
+<div id="mobile-warning">
+  <p>📢 請使用電腦開啟此網頁</p>
+  <p style="font-size:16px; opacity:0.8;">（目前不支援手機瀏覽）</p>
+</div>
+
+
 </body>
 </html>
 </html>
