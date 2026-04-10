@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBS_pK2aAl--i-lCsyD1GI2db8Vh2tSq-o",
+    authDomain: "real-estate-system-edfba.firebaseapp.com",
+    projectId: "real-estate-system-edfba",
+    storageBucket: "real-estate-system-edfba.firebasestorage.app",
+    messagingSenderId: "716449916436",
+    appId: "1:716449916436:web:fd31006267cdd843386901"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // 檢查是否登入
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      // 如果沒登入，踢回登入頁
+      window.location.href = "login.html";
+    }
+  });
+</script>
+	
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>A4 Table</title>
