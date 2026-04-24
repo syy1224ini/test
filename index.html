@@ -1,32 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBS_pK2aAl--i-lCsyD1GI2db8Vh2tSq-o",
-    authDomain: "real-estate-system-edfba.firebaseapp.com",
-    projectId: "real-estate-system-edfba",
-    storageBucket: "real-estate-system-edfba.firebasestorage.app",
-    messagingSenderId: "716449916436",
-    appId: "1:716449916436:web:fd31006267cdd843386901"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // 監聽登入狀態
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      // 沒登入就踢回 login.html
-      window.location.href = "login.html";
-    }
-  });
-</script>
-	
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>A4 Table</title>
@@ -1083,7 +1057,9 @@ body { padding-right: var(--tools-pad, 0px); }
 @media print {
   #F07b input, #F07b select { vertical-align: baseline !important; }
 }
-	  
+
+
+
   </style>
 </head>
 <body>
