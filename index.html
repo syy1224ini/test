@@ -1608,7 +1608,7 @@ body { padding-right: var(--tools-pad, 0px); }
       <tr>
         <td id="F26a" style="width:2cm;">格局圖</td>
         <td id="F26b" style="width:18cm; position: relative;">
-		<span style="position: absolute; bottom: 2px; right: 5px; font-size: 10px; color: #333;">20260424版本</span>
+		<span style="position: absolute; bottom: 2px; right: 5px; font-size: 10px; color: #333;">20260805版本</span>
 		</td>
       </tr>
     </table>
@@ -1790,6 +1790,9 @@ function clearAllInputs() {
     { target: '#F10b input', required: true, msg: '主建物：請填寫' },
     { target: '#F10j input', required: true, msg: '總建坪：請填寫' },
     { target: '#F11b input, #F11b textarea, #F11b select', required: true, msg: '出售樓層(空地請填1)：請填寫' },
+	
+	// F13h 座向（兩個 input 強制皆須填寫文字）
+    { target: '#F13h input', required: true, msg: '座向：官網系統規定要寫座向' },
 
     // F14f 必填
     { target: '#F14f input, #F14f textarea', required: true, msg: '委託總價：請填寫' },
